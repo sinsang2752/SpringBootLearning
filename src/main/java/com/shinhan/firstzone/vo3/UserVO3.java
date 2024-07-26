@@ -1,5 +1,6 @@
 package com.shinhan.firstzone.vo3;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -26,7 +27,7 @@ public class UserVO3 {
 	String username;
 
 	//주 테이블에서 참조하기 
-	@OneToOne(mappedBy = "user3")
+	@OneToOne(mappedBy = "user3", cascade = CascadeType.ALL)
 	UserCellPhoneVO3 phone;
 
 }

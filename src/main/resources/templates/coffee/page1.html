@@ -1,10 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeLeaf.org">
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-	<h1>아무도 이름을 정해주지않아요.</h1>
+<th:block th:replace="~{/layout/layout1 :: setContent(~{this::content2} )}">
+    <th:block th:fragment="content2">
+        <h1>아무도 이름을 정해주지 않아요</h1>
+        <h2 th:text="${menu}">ㅁㅁ</h2>
+        
+        <!-- html 태그가 문자로 출력됨 -->
+        <h2 th:text="${'<h1>' + menu + '</h1>'}">메뉴 이름 -text-</h2>
+        
+        <!-- html 태그가 동작함 -->
+        <h2 th:utext="${'<h1>' + menu + '</h1>'}">메뉴 이름 -utext-</h2>
+        
+        <h3 th:text="${member.mname}">BB</h3>
+        <h3>inline 방식: [[${member.mid}]]</h3>
+    </th:block>
+</th:block>
+    
 </body>
 </html>

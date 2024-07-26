@@ -1,20 +1,20 @@
-package com.shinhan.firstzone.vo3;
+package com.shinhan.firstzone.vo4;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.shinhan.firstzone.vo3.FreeBoardEntity;
+import com.shinhan.firstzone.vo3.FreeReplyEntity;
 
-import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,18 +29,16 @@ import lombok.ToString;
 @AllArgsConstructor
 @Getter
 @Setter
-@ToString
-@EqualsAndHashCode(of = {"bno"})
-@Table(name = "t_freeboard")
+@ToString(exclude = {"board"})
+@Table(name = "t_webreply")
 @Entity
-public class FreeBoardEntity {
+public class WebReplyEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long bno;
-	private String title;
-	private String writer;
-	private String content;
+	private Long rno;
+	private String reply;	//댓글 내용
+	private String replyer;
 	
 	@CreationTimestamp	//insert시에 자동
 	private Timestamp regdate;
@@ -48,11 +46,7 @@ public class FreeBoardEntity {
 	@UpdateTimestamp	//insert, update시 자동
 	private Timestamp updatedate;
 	
-	@JsonIgnore
-	// 하나의 board에 댓글이 여러개 있다.(부모)
-	@OneToMany(mappedBy = "board"
-			, cascade = CascadeType.ALL
-			, fetch = FetchType.LAZY)
-	private List<FreeReplyEntity> reply;
-	
+	// 하나의 board에 댓글이 여러개 있다.(자식)
+	@ManyToOne (fetch = FetchType.LAZY)
+	private WebBoardEntity board;
 }
