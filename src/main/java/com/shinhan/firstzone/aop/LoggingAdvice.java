@@ -26,7 +26,7 @@ public class LoggingAdvice  {
  
 	
 	//@Pointcut("execution(* select*(..))")
-	@Pointcut("within(com.shinhan.sbproject.webboard.WebBoardController)")
+	@Pointcut("within(com.shinhan.firstzone.controller2.WebBoardController)")
 	public void aa() {}
 	//메서드이름은 상관없음, 메서드형태를 만들고 @Pointcut작성
 	

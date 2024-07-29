@@ -14,7 +14,7 @@ import org.springframework.util.StopWatch;
 @Order(1)//낮은것이 먼저
 public class StopWatchAdvice  {
 	
-	@Pointcut("execution(* f2(..))")
+	@Pointcut("execution(* register(..))")
 	//@Pointcut("within(com.shinhan.model.DeptService)")
 	public void mypontcut1() {
 		//로직없음..함수형태일때만 가능한 annotation을 사용중 
@@ -32,7 +32,7 @@ public class StopWatchAdvice  {
 		System.out.println("**StopWatch***" + targetMethodName + "메서드 호출 전");
 		StopWatch watch = new StopWatch("계산시간");
 		watch.start();
-		//주업무를 수행한다. 
+		//주업무를 수행한다.
 		Object object = jp.proceed();
 		//보조업무
 		System.out.println("*****" + targetMethodName + "메서드 호출 후");

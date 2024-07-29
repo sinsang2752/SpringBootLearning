@@ -8,6 +8,8 @@
 <th:block th:replace="~{/layout/basicLayout :: setContent(~{this::content2} )}">
 <th:block th:fragment="content2">
 		<h1>게시글 상세보기</h1>
+		<input type="text" id="_csrf" name="_csrf" th:content="${_csrf.token}" th:value="${_csrf.token}"/>
+		<input type="text" id="_csrf_header" name="_csrf_header" th:content="${_csrf.headerName}" th:value="${_csrf.headerName}"/>
 		<form th:action="@{/webboard/modify}" th:method="POST">
 		<div class="form-group">
 			<label>BNO</label>
@@ -84,6 +86,18 @@
 	<script th:inline="javascript">
 		var boardBno = /*[[${board.bno}]]*/0;
 		
+		var token = $("input[name='_csrf']").attr("content");
+		var header = $("input[name='_csrf_header']").attr("content");
+		var beforeSend = function(xhr){ xhr.setRequestHeader(header, token);}
+		
+		function ajax_send(){
+			  if(token && header) {
+				  $(document).ajaxSend(function(event, xhr, options) {
+				 	 xhr.setRequestHeader(header, token);
+				  });
+			  }
+		  }
+		
 		$(".replySave").click(f_insertReply);
 		$(".replyCount").click(f_selectReplies);
 		
@@ -94,6 +108,7 @@
 		function f_replyDeleteDB() {
 			var rno = $("input[name='rno']").val();
 			$.ajax({
+				beforeSend,
 				url: "/replies/delete/" + rno,
 				method: "DELETE",
 				success: function(resData) {
@@ -114,6 +129,7 @@
 			var rno = $("input[name='rno']").val();
 			var replyDTO = {reply, replyer, rno};
 			$.ajax({
+				beforeSend,
 				url: "/replies/modify",
 				method: "PUT",
 				data: JSON.stringify(replyDTO),
@@ -164,6 +180,7 @@
 			var replyDTO = {reply, replyer, boardBno};
 			
 			$.ajax({
+				beforeSend,
 				url : "/replies/register",
 				method : "POST",
 				data : JSON.stringify(replyDTO),
@@ -177,9 +194,10 @@
 			});
 		}
 		
-		function f_selectReplies() {
-			$.getJSON("/replies/list/"+boardBno, f_dataDisplay);
-		}
+		function f_selectReplies(){
+			  ajax_send();
+			  $.getJSON("/replies/list/"+boardBno, f_dataDisplay);
+		  }
 		
 		function f_formatDate(str) {
 			var date = new Date(str);
